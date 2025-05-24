@@ -1,0 +1,97 @@
+server:
+  port: 8080
+  readTimeout: 30
+  writeTimeout: 30
+
+aws:
+  region: "us-east-1"
+  accessKeyId: "your-aws-access-key"
+  secretAccessKey: "your-aws-secret-key"
+  bucketName: "your-bucket-name"
+  endpoint: ""
+  useSSL: true
+  maxRetries: 3
+  timeout: 30
+
+mongodb:
+  uri: mongodb://mongodb:27017
+  database: storage_service
+
+redis:
+  addr: redis:6379
+  password: ""
+  db: 0
+
+storage:
+  maxFileSize: 104857600  # 100MB
+  allowedTypes:
+    - "image/jpeg"
+    - "image/png"
+    - "image/gif"
+    - "application/pdf"
+    - "application/msword"
+    - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    - "text/plain"
+    - "text/csv"
+    - "application/json"
+  tempDir: "/tmp/storage-service"
+  retentionDays: 30
+  maxFilesPerUser: 1000
+  maxTotalSizePerUser: 1073741824  # 1GB
+
+logging:
+  level: info
+  format: json
+  output: stdout
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: 9090
+
+monitoring:
+  prometheus:
+    enabled: true
+    path: /metrics
+  healthCheck:
+    enabled: true
+    path: /health
+    interval: 30s
+  tracing:
+    enabled: true
+    serviceName: storage-service
+    jaegerEndpoint: http://jaeger:14268/api/traces
+
+rateLimit:
+  enabled: true
+  requests: 100
+  window: 60
+  byIP: true
+  byUser: true
+
+cache:
+  enabled: true
+  ttl: 3600
+  maxSize: 1000
+  cleanupInterval: 300
+
+security:
+  requireAuthentication: true
+  allowedOrigins:
+    - "*"
+  maxUploadConcurrency: 5
+  scanForViruses: true
+  virusScanProvider: "clamav"
+  virusScanEndpoint: "clamav:3310"
+  encryption:
+    enabled: true
+    algorithm: "aes-256-gcm"
+    keyRotationDays: 30
+
+backup:
+  enabled: true
+  schedule: "0 0 * * *"  # Daily at midnight
+  retentionDays: 90
+  provider: "aws"
+  bucket: "backup-bucket"
+  region: "us-east-1" 

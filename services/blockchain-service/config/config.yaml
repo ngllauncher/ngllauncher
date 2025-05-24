@@ -1,0 +1,86 @@
+server:
+  port: 8080
+  readTimeout: 30
+  writeTimeout: 30
+
+blockchain:
+  networkUrl: "https://mainnet.infura.io/v3/your-infura-project-id"
+  privateKey: "your-private-key"
+  gasLimit: 3000000
+  gasPrice: 20000000000
+  confirmations: 3
+  networks:
+    ethereum:
+      chainId: 1
+      rpcUrl: "https://mainnet.infura.io/v3/your-infura-project-id"
+      wsUrl: "wss://mainnet.infura.io/ws/v3/your-infura-project-id"
+    polygon:
+      chainId: 137
+      rpcUrl: "https://polygon-rpc.com"
+      wsUrl: "wss://polygon-rpc.com/ws"
+    bsc:
+      chainId: 56
+      rpcUrl: "https://bsc-dataseed.binance.org"
+      wsUrl: "wss://bsc-ws-node.nariox.org:443"
+
+mongodb:
+  uri: mongodb://mongodb:27017
+  database: blockchain_service
+
+redis:
+  addr: redis:6379
+  password: ""
+  db: 0
+
+contracts:
+  defaultGasLimit: 3000000
+  defaultGasPrice: 20000000000
+  verification:
+    enabled: true
+    etherscanApiKey: "your-etherscan-api-key"
+    polygonscanApiKey: "your-polygonscan-api-key"
+    bscscanApiKey: "your-bscscan-api-key"
+
+logging:
+  level: info
+  format: json
+  output: stdout
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: 9090
+
+monitoring:
+  prometheus:
+    enabled: true
+    path: /metrics
+  healthCheck:
+    enabled: true
+    path: /health
+    interval: 30s
+  tracing:
+    enabled: true
+    serviceName: blockchain-service
+    jaegerEndpoint: http://jaeger:14268/api/traces
+
+rateLimit:
+  enabled: true
+  requests: 100
+  window: 60
+  byIP: true
+  byUser: true
+
+cache:
+  enabled: true
+  ttl: 3600
+  maxSize: 1000
+  cleanupInterval: 300
+
+security:
+  maxConcurrentDeployments: 10
+  maxConcurrentTransactions: 50
+  transactionTimeout: 300
+  deploymentTimeout: 600
+  requireWhitelist: false
+  whitelistedAddresses: [] 

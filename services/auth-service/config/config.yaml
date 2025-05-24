@@ -1,0 +1,81 @@
+server:
+  port: 8080
+  readTimeout: 30
+  writeTimeout: 30
+
+jwt:
+  secret: "your-secret-key"
+  accessTokenTTL: 3600
+  refreshTokenTTL: 604800
+  signingMethod: "HS256"
+
+database:
+  host: postgres
+  port: 5432
+  user: postgres
+  password: postgres
+  dbname: auth_service
+  sslmode: disable
+
+redis:
+  addr: redis:6379
+  password: ""
+  db: 0
+
+oauth:
+  twitter:
+    clientId: "your-twitter-client-id"
+    clientSecret: "your-twitter-client-secret"
+    callbackUrl: "http://localhost:8080/api/v1/oauth/twitter/callback"
+  discord:
+    clientId: "your-discord-client-id"
+    clientSecret: "your-discord-client-secret"
+    callbackUrl: "http://localhost:8080/api/v1/oauth/discord/callback"
+
+logging:
+  level: info
+  format: json
+  output: stdout
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: 9090
+
+security:
+  passwordMinLength: 8
+  passwordMaxLength: 64
+  passwordRequireSpecial: true
+  passwordRequireNumber: true
+  passwordRequireUppercase: true
+  passwordRequireLowercase: true
+  maxLoginAttempts: 5
+  lockoutDuration: 900
+  sessionTimeout: 3600
+  enable2FA: false
+  smtp:
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com
+    password: your-app-password
+    from: your-email@gmail.com
+
+monitoring:
+  prometheus:
+    enabled: true
+    path: /metrics
+  healthCheck:
+    enabled: true
+    path: /health
+    interval: 30s
+  tracing:
+    enabled: true
+    serviceName: auth-service
+    jaegerEndpoint: http://jaeger:14268/api/traces
+
+rateLimit:
+  enabled: true
+  requests: 100
+  window: 60
+  byIP: true
+  byUser: true 

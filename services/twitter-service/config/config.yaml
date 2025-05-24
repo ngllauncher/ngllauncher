@@ -1,0 +1,87 @@
+server:
+  port: 8080
+  readTimeout: 30
+  writeTimeout: 30
+
+twitter:
+  apiKey: "your-twitter-api-key"
+  apiSecret: "your-twitter-api-secret"
+  accessToken: "your-twitter-access-token"
+  accessSecret: "your-twitter-access-secret"
+  streamRules:
+    - "crypto"
+    - "blockchain"
+    - "web3"
+    - "nft"
+    - "defi"
+
+mongodb:
+  uri: mongodb://mongodb:27017
+  database: twitter_service
+
+redis:
+  addr: redis:6379
+  password: ""
+  db: 0
+
+analytics:
+  updateInterval: 300
+  retentionDays: 30
+
+logging:
+  level: info
+  format: json
+  output: stdout
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: 9090
+
+streaming:
+  enabled: true
+  bufferSize: 1000
+  batchSize: 100
+  flushInterval: 5
+  maxRetries: 3
+  retryDelay: 5
+
+processing:
+  sentimentAnalysis:
+    enabled: true
+    provider: "google"
+    apiKey: "your-google-api-key"
+  entityExtraction:
+    enabled: true
+    provider: "google"
+    apiKey: "your-google-api-key"
+  languageDetection:
+    enabled: true
+    provider: "google"
+    apiKey: "your-google-api-key"
+
+monitoring:
+  prometheus:
+    enabled: true
+    path: /metrics
+  healthCheck:
+    enabled: true
+    path: /health
+    interval: 30s
+  tracing:
+    enabled: true
+    serviceName: twitter-service
+    jaegerEndpoint: http://jaeger:14268/api/traces
+
+rateLimit:
+  enabled: true
+  requests: 100
+  window: 60
+  byIP: true
+  byUser: true
+
+cache:
+  enabled: true
+  ttl: 3600
+  maxSize: 1000
+  cleanupInterval: 300 

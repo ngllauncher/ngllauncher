@@ -1,0 +1,42 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "api-gateway"
+    static_configs:
+      - targets: ["api-gateway:9090"]
+
+  - job_name: "auth-service"
+    static_configs:
+      - targets: ["auth-service:9090"]
+
+  - job_name: "twitter-service"
+    static_configs:
+      - targets: ["twitter-service:9090"]
+
+  - job_name: "blockchain-service"
+    static_configs:
+      - targets: ["blockchain-service:9090"]
+
+  - job_name: "storage-service"
+    static_configs:
+      - targets: ["storage-service:9090"]
+
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100"] 

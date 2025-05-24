@@ -1,0 +1,68 @@
+server:
+  port: 8080
+  readTimeout: 30
+  writeTimeout: 30
+
+rateLimit:
+  requests: 100
+  window: 60
+
+services:
+  auth: http://auth-service:8080
+  twitter: http://twitter-service:8080
+  blockchain: http://blockchain-service:8080
+  storage: http://storage-service:8080
+
+redis:
+  addr: redis:6379
+  password: ""
+  db: 0
+
+logging:
+  level: info
+  format: json
+  output: stdout
+
+metrics:
+  enabled: true
+  path: /metrics
+  port: 9090
+
+cors:
+  allowedOrigins:
+    - "*"
+  allowedMethods:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - OPTIONS
+  allowedHeaders:
+    - Authorization
+    - Content-Type
+  exposedHeaders:
+    - X-Total-Count
+  allowCredentials: true
+  maxAge: 86400
+
+security:
+  jwtSecret: "your-secret-key"
+  tokenExpiration: 3600
+  refreshTokenExpiration: 604800
+  rateLimitByIP: true
+  enableHTTPS: false
+  sslCert: ""
+  sslKey: ""
+
+monitoring:
+  prometheus:
+    enabled: true
+    path: /metrics
+  healthCheck:
+    enabled: true
+    path: /health
+    interval: 30s
+  tracing:
+    enabled: true
+    serviceName: api-gateway
+    jaegerEndpoint: http://jaeger:14268/api/traces 
