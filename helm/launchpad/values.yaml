@@ -1,0 +1,99 @@
+# Global settings
+global:
+  environment: production
+  domain: launchpad.example.com
+
+# API Gateway configuration
+apiGateway:
+  replicaCount: 3
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  service:
+    type: LoadBalancer
+    port: 80
+
+# Auth Service configuration
+authService:
+  replicaCount: 2
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# Twitter Service configuration
+twitterService:
+  replicaCount: 2
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "200m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+# PostgreSQL configuration
+postgresql:
+  enabled: true
+  auth:
+    username: launchpad
+    password: launchpad
+    database: launchpad
+  primary:
+    persistence:
+      size: 10Gi
+
+# Redis configuration
+redis:
+  enabled: true
+  auth:
+    password: launchpad
+  master:
+    persistence:
+      size: 5Gi
+
+# MongoDB configuration
+mongodb:
+  enabled: true
+  auth:
+    username: launchpad
+    password: launchpad
+    database: launchpad
+  persistence:
+    size: 10Gi
+
+# Prometheus configuration
+prometheus:
+  enabled: true
+  server:
+    persistentVolume:
+      size: 10Gi
+  alertmanager:
+    persistentVolume:
+      size: 2Gi
+
+# Grafana configuration
+grafana:
+  enabled: true
+  admin:
+    password: launchpad
+  persistence:
+    size: 5Gi
+  dashboards:
+    default:
+      services:
+        json: |
+          {
+            "annotations": {
+              "list": []
+            },
+            "editable": true,
+            "panels": []
+          } 
