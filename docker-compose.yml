@@ -1,0 +1,172 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    environment:
+      - GIN_MODE=debug
+    depends_on:
+      - redis
+      - auth-service
+      - twitter-service
+      - blockchain-service
+      - storage-service
+    networks:
+      - backend-network
+
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+      - "9091:9090"
+    environment:
+      - GIN_MODE=debug
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - backend-network
+
+  twitter-service:
+    build:
+      context: ./services/twitter-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+      - "9092:9090"
+    environment:
+      - GIN_MODE=debug
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - backend-network
+
+  blockchain-service:
+    build:
+      context: ./services/blockchain-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8080"
+      - "9093:9090"
+    environment:
+      - GIN_MODE=debug
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - backend-network
+
+  storage-service:
+    build:
+      context: ./services/storage-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8080"
+      - "9094:9090"
+    environment:
+      - GIN_MODE=debug
+    depends_on:
+      - mongodb
+      - redis
+      - clamav
+    volumes:
+      - storage-data:/tmp/storage-service
+    networks:
+      - backend-network
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: auth_service
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - backend-network
+
+  mongodb:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - backend-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend-network
+
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - backend-network
+
+  grafana:
+    image: grafana/grafana:10.0.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    networks:
+      - backend-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.47
+    ports:
+      - "16686:16686"
+      - "14250:14250"
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=:9411
+    networks:
+      - backend-network
+
+  clamav:
+    image: clamav/clamav:1.0
+    ports:
+      - "3310:3310"
+    networks:
+      - backend-network
+
+volumes:
+  postgres-data:
+  mongodb-data:
+  redis-data:
+  prometheus-data:
+  grafana-data:
+  storage-data:
+
+networks:
+  backend-network:
+    driver: bridge 

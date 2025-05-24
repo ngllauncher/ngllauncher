@@ -1,0 +1,36 @@
+sampling:
+  default:
+    type: probabilistic
+    param: 1.0
+
+ingester:
+  deadlockInterval: 0s
+
+storage:
+  type: memory
+  memory:
+    max-traces: 50000
+
+query:
+  base-path: /jaeger
+
+agent:
+  http_server:
+    host_port: :5778
+  grpc_server:
+    host_port: :5775
+  zipkin:
+    host_port: :5775
+
+collector:
+  zipkin:
+    host_port: :9411
+
+ingester:
+  deadlockInterval: 0s
+
+query:
+  base-path: /jaeger
+  static_files:
+    - path: /etc/jaeger/query-ui
+      directory: /usr/share/jaeger/query-ui 
